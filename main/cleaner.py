@@ -4,12 +4,12 @@ import html
 import re
 
 
-data = pd.read_csv('app/main/dataset/Combined Data.csv')
+data = pd.read_csv('app\main\dataset\\val.csv')
 df = pd.DataFrame(data)
 
 df.replace(r'^\s*$', np.nan, regex=True,inplace=True)
-df['index'] = pd.to_numeric(df['index'] , errors='coerce')
-df.dropna(subset=['index','statement','status'], how='any')
+# df['index'] = pd.to_numeric(df['index'] , errors='coerce')
+df.dropna(subset=['statement','status'], how='any')
 
 def clean_text(text):
     if not isinstance(text, str):
@@ -25,12 +25,19 @@ def clean_text(text):
     
     return text
 
-print("Scrubbing text (removing HTML, newlines, links)...")
+# index = {}
+
+# if df['status']!= index:
+#     index = 
+
+prefixToRemove = 'self.'
+
 df['statement'] = df['statement'].apply(clean_text)
 df.replace(r'^\s*$', np.nan, regex=True, inplace=True)
+df['status'] = df['status'].str.replace(prefixToRemove, '', regex=False)
 df.dropna(subset=['statement'], inplace=True)
-df['index'] = df['index'].astype(int)
-df.to_csv('app\main\dataset\cleanData.csv', index=False)
+# df['index'] = df['index'].astype(int)
+df.to_csv('app\main\dataset\cleanDataVal.csv', index=True)
 
 
 print(f"Done! Saved {len(df)} rows to: app\main\dataset")
